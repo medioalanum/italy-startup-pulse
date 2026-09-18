@@ -1,15 +1,12 @@
 <p align="center">
-  <img src="./docs/images/italy-startup-pulse-logo.svg" width="640" alt="Italy Startup Pulse logo" />
+  <img src="./docs/images/italy-startup-pulse-logo.png" width="720" alt="Italy Startup Pulse logo" />
 </p>
 
 <p align="center">
-  <img alt="Python" src="https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54">
-  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white">
-  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
-  <img alt="SQLAlchemy" src="https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white">
-  <img alt="GitHub Actions" src="https://img.shields.io/badge/GitHub_Actions-2671E5?style=for-the-badge&logo=githubactions&logoColor=white">
-  <img alt="Docker" src="https://img.shields.io/badge/Docker-0db7ed?style=for-the-badge&logo=docker&logoColor=white">
-  <img alt="Render" src="https://img.shields.io/badge/Render-000000?style=for-the-badge&logo=render&logoColor=white">
+  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/monthly-source-check.yml"><img alt="Monthly source check" src="https://img.shields.io/badge/monthly_source_check-enabled-38b2ac?style=for-the-badge&logo=githubactions&logoColor=white"></a>
+  <a href="https://italy-startup-pulse.onrender.com/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-38b2ac?style=for-the-badge&logo=render&logoColor=white"></a>
+  <a href="https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici"><img alt="MIMIT source" src="https://img.shields.io/badge/source-MIMIT-102a43?style=for-the-badge"></a>
 </p>
 
 # Italy Startup Pulse

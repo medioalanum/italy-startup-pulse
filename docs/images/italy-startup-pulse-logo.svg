@@ -2,8 +2,10 @@
   <title id="title">Italy Startup Pulse</title>
   <desc id="desc">A stylised map of Italy with a pulse line and the project name.</desc>
   <rect width="640" height="180" rx="24" fill="#102a43"/>
-  <path d="M112 24c20 15 28 35 23 55l-10 24 13 23-12 28-22-13-12-29-18-15 7-23-11-27 17-19z" fill="#f4f7fa"/>
-  <path d="M58 103h29l9-22 13 48 12-29h31" fill="none" stroke="#38b2ac" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="178" y="82" fill="#f4f7fa" font-family="Arial, sans-serif" font-size="34" font-weight="700">Italy Startup</text>
-  <text x="178" y="123" fill="#38b2ac" font-family="Arial, sans-serif" font-size="34" font-weight="700">Pulse</text>
+  <g transform="translate(48 0)">
+    <path d="M112 24c20 15 28 35 23 55l-10 24 13 23-12 28-22-13-12-29-18-15 7-23-11-27 17-19z" fill="#f4f7fa"/>
+    <path d="M58 103h29l9-22 13 48 12-29h31" fill="none" stroke="#38b2ac" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="178" y="82" fill="#f4f7fa" font-family="Arial, sans-serif" font-size="34" font-weight="700">Italy Startup</text>
+    <text x="178" y="123" fill="#38b2ac" font-family="Arial, sans-serif" font-size="34" font-weight="700">Pulse</text>
+  </g>
 </svg>

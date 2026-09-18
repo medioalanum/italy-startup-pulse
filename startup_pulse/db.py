@@ -10,6 +10,12 @@ def database_url() -> str:
     value = os.getenv("DATABASE_URL")
     if not value:
         raise RuntimeError("DATABASE_URL is required; SQLite is not supported")
+    # Render and Neon commonly provide the generic PostgreSQL URL scheme.
+    # Select the psycopg 3 dialect explicitly because that is our dependency.
+    if value.startswith("postgres://"):
+        return value.replace("postgres://", "postgresql+psycopg://", 1)
+    if value.startswith("postgresql://"):
+        return value.replace("postgresql://", "postgresql+psycopg://", 1)
     return value
 
 

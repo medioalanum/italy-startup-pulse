@@ -1,0 +1,25 @@
+name: Monthly source check
+
+on:
+  schedule:
+    # GitHub Actions starts a short-lived runner once a month.
+    - cron: "17 9 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the official MIMIT reports page
+        env:
+          SOURCE_URL: https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --max-time 30 "$SOURCE_URL" \
+            --output /tmp/mimit-reports.html
+          test -s /tmp/mimit-reports.html
+          printf 'MIMIT reports page is reachable.\n'
+          printf 'Page size: %s bytes\n' "$(wc -c < /tmp/mimit-reports.html)"

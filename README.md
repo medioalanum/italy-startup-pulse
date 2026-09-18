@@ -24,7 +24,7 @@ uv run ruff check .
 uv run ruff format --check .
 ```
 
-The MVP uses SQLAlchemy `create_all`; migrations should be introduced if the schema grows. Snapshot replacement is used when a revised quarter is ingested. Phase 2 scheduling and Phase 3 JSON API remain roadmap items.
+The MVP uses SQLAlchemy `create_all`; migrations should be introduced if the schema grows. Snapshot replacement is used when a revised quarter is ingested. A free GitHub Actions workflow checks the official MIMIT reports page monthly and can also be started manually. It runs on a short-lived hosted runner and does not keep a worker, Render service, or database process running continuously. PDF ingestion remains explicit until a stable publication URL and revision policy are confirmed.
 
 ## Sources and limitations
 

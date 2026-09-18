@@ -55,6 +55,16 @@ def dashboard(request: Request):
     }
     regional = [row for row in latest_rows if row.dimension == "region"]
     sectors = [row for row in latest_rows if row.dimension == "sector"]
+    latest_net_change = (
+        sum(row.startup_count for row in regional)
+        - sum(
+            row.startup_count
+            for row in rows
+            if row.quarter == previous and row.dimension == "region"
+        )
+        if previous
+        else None
+    )
     net_changes = {
         f"{row.dimension}:{row.name}": row.startup_count
         - previous_values.get((row.dimension, row.name), row.startup_count)
@@ -71,6 +81,7 @@ def dashboard(request: Request):
             "regional": regional,
             "sectors": sectors,
             "net_changes": net_changes,
+            "latest_net_change": latest_net_change,
         },
     )
 

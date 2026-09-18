@@ -1,5 +1,6 @@
 import os
 from collections.abc import Generator
+from datetime import date
 
 from sqlalchemy import Date, Float, Integer, String, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
@@ -24,7 +25,7 @@ class AggregateSnapshot(Base):
     name: Mapped[str] = mapped_column(String(255))
     startup_count: Mapped[int] = mapped_column(Integer)
     share_national: Mapped[float | None] = mapped_column(Float, nullable=True)
-    source_reference_date: Mapped[str | None] = mapped_column(Date, nullable=True)
+    source_reference_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     batch_checksum: Mapped[str] = mapped_column(String(64))
 
 

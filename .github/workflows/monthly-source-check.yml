@@ -9,17 +9,56 @@ on:
 permissions:
   contents: read
 
+env:
+  REPORTS_URL: https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici
+
 jobs:
   check-source:
     runs-on: ubuntu-latest
     steps:
-      - name: Check the official MIMIT reports page
-        env:
-          SOURCE_URL: https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Discover the newest official MIMIT report
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error --max-time 30 "$SOURCE_URL" \
+          curl --fail --location --silent --show-error --max-time 30 "$REPORTS_URL" \
             --output /tmp/mimit-reports.html
           test -s /tmp/mimit-reports.html
-          printf 'MIMIT reports page is reachable.\n'
-          printf 'Page size: %s bytes\n' "$(wc -c < /tmp/mimit-reports.html)"
+          uv run python - <<'PY'
+          from pathlib import Path
+          from startup_pulse.source_discovery import discover_latest_report
+          report = discover_latest_report(Path('/tmp/mimit-reports.html').read_text())
+          Path('/tmp/source-url').write_text(report.url)
+          Path('/tmp/source-quarter').write_text(report.quarter)
+          with Path('/tmp/source-quarter').open() as quarter_file:
+              print(f"SOURCE_QUARTER={quarter_file.read().strip()}")
+          print(f"Discovered {report.quarter}: {report.url}")
+          PY
+          echo "SOURCE_QUARTER=$(cat /tmp/source-quarter)" >> "$GITHUB_ENV"
+      - name: Download and validate the newest report
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --max-time 120 \
+            "$(cat /tmp/source-url)" --output /tmp/latest-report.pdf
+          test -s /tmp/latest-report.pdf
+          uv sync --locked
+          SOURCE_PDF_PATH=/tmp/latest-report.pdf SOURCE_QUARTER="$(cat /tmp/source-quarter)" \
+            uv run python - <<'PY'
+          import os
+          from pathlib import Path
+          from startup_pulse.pdf_source import extract_pdf_records
+          records = extract_pdf_records(Path(os.environ['SOURCE_PDF_PATH']), os.environ['SOURCE_QUARTER'])
+          regions = {record.name for record in records if record.dimension == 'region'}
+          sectors = {record.name for record in records if record.dimension == 'sector'}
+          if len(regions) < 10 or len(sectors) < 5:
+              raise SystemExit(f'Unexpected report shape: {len(regions)} regions, {len(sectors)} sectors')
+          print(f'Validated {len(regions)} regions and {len(sectors)} sectors')
+          PY
+      - name: Ingest the validated snapshot into Neon
+        if: ${{ secrets.DATABASE_URL != '' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SOURCE_MODE: live
+          SOURCE_PDF_PATH: /tmp/latest-report.pdf
+          SOURCE_QUARTER: ${{ env.SOURCE_QUARTER }}
+        run: uv run python -m startup_pulse.ingest

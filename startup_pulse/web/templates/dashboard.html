@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}<h1>Italy Startup Pulse</h1><p>Aggregated registry totals by region and sector.</p><table><tr><th>Quarter</th><th>Dimension</th><th>Name</th><th>Startups</th></tr>{% for row in rows %}<tr><td>{{ row.quarter }}</td><td>{{ row.dimension }}</td><td>{{ row.name }}</td><td>{{ row.startup_count }}</td></tr>{% endfor %}</table>{% endblock %}

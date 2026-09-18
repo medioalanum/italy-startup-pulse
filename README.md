@@ -8,6 +8,10 @@ The MIMIT/InfoCamere quarterly Cruscotto publishes aggregate totals by region an
 
 The current implementation uses `SOURCE_MODE=sample` with a clearly labelled fixture. Live PDF ingestion accepts `SOURCE_PDF_PATH` and `SOURCE_QUARTER`, and stores the source path, checksum, and execution summary in an `ingestion_batches` table.
 
+## Demo deployment
+
+The Render blueprint is ready to deploy with `SOURCE_MODE=sample`. Set `DATABASE_URL` to the Neon pooled PostgreSQL connection string, deploy from the `main` branch, and verify `/health` returns `{"status":"ok"}`. Live PDF ingestion remains a manual/local operation until a persistent source-file strategy is selected.
+
 ## Setup
 
 Requires Python 3.12+, uv, Docker, and Docker Compose. Start local PostgreSQL with `docker compose up -d postgres`, copy `.env.example` to `.env`, set `DATABASE_URL`, then run `uv sync`.

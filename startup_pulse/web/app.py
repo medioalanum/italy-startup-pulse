@@ -23,6 +23,11 @@ def sample_mode() -> bool:
     return os.getenv("SOURCE_MODE", "sample") == "sample"
 
 
+@app.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
 @app.get("/")
 def dashboard(request: Request):
     with next(session()) as db:

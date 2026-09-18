@@ -17,3 +17,4 @@ def test_dashboard_routes(test_database_url: str, monkeypatch) -> None:
     assert "Italy Startup Pulse" in dashboard.text
     assert anomalies.status_code == 200
     assert "Anomalies" in anomalies.text
+    assert client.get("/health").json() == {"status": "ok"}

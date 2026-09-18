@@ -58,4 +58,6 @@ def session() -> Generator[Session, None, None]:
 
 
 def latest_quarter(db: Session) -> str | None:
-    return db.scalar(select(AggregateSnapshot.quarter).order_by(AggregateSnapshot.quarter.desc()))
+    return db.scalar(
+        select(AggregateSnapshot.quarter).order_by(AggregateSnapshot.quarter.desc())
+    )

@@ -28,24 +28,42 @@ def ingest() -> dict[str, int]:
             except Exception as exc:
                 rejected += 1
                 Path("quarantine").mkdir(exist_ok=True)
-                with Path("quarantine") .joinpath(f"{date.today().isoformat()}.log").open("a") as handle:
+                with (
+                    Path("quarantine")
+                    .joinpath(f"{date.today().isoformat()}.log")
+                    .open("a") as handle
+                ):
                     handle.write(json.dumps({"raw": item, "error": str(exc)}) + "\n")
                 continue
-            exists = db.query(AggregateSnapshot).filter_by(
-                quarter=record.quarter, dimension=record.dimension, name=record.name
-            ).first()
+            exists = (
+                db.query(AggregateSnapshot)
+                .filter_by(
+                    quarter=record.quarter, dimension=record.dimension, name=record.name
+                )
+                .first()
+            )
             if exists:
                 db.delete(exists)
                 duplicates += 1
-            db.add(AggregateSnapshot(
-                quarter=record.quarter, dimension=record.dimension, name=record.name,
-                startup_count=record.startup_count, share_national=record.share_national,
-                source_reference_date=record.source_reference_date,
-                batch_checksum=checksum,
-            ))
+            db.add(
+                AggregateSnapshot(
+                    quarter=record.quarter,
+                    dimension=record.dimension,
+                    name=record.name,
+                    startup_count=record.startup_count,
+                    share_national=record.share_national,
+                    source_reference_date=record.source_reference_date,
+                    batch_checksum=checksum,
+                )
+            )
             accepted += 1
         db.commit()
-    return {"read": len(raw), "accepted": accepted, "rejected": rejected, "revised": duplicates}
+    return {
+        "read": len(raw),
+        "accepted": accepted,
+        "rejected": rejected,
+        "revised": duplicates,
+    }
 
 
 if __name__ == "__main__":

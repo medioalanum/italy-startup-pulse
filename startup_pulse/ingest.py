@@ -31,11 +31,16 @@ def load_records() -> list[dict[str, object]]:
 
 
 def ingest() -> dict[str, int]:
+    source_mode = os.getenv("SOURCE_MODE", "sample")
     raw = load_records()
     checksum = hashlib.sha256(json.dumps(raw, sort_keys=True).encode()).hexdigest()
     accepted = rejected = duplicates = 0
     init_db()
     with next(session()) as db:
+        # A live report is the authoritative snapshot for its quarter. Remove
+        # any prior fixture or revised rows for that quarter before replacing it.
+        if source_mode == "live" and raw:
+            db.query(AggregateSnapshot).filter_by(quarter=raw[0]["quarter"]).delete()
         for item in raw:
             try:
                 record = AggregateRecord.model_validate(item)

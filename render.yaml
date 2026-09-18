@@ -9,4 +9,4 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: SOURCE_MODE
-        value: sample
+        value: live

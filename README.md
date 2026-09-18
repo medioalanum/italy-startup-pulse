@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/monthly-source-check.yml"><img alt="Monthly source check" src="https://img.shields.io/badge/monthly_source_check-enabled-38b2ac?style=for-the-badge&logo=githubactions&logoColor=white"></a>
-  <a href="https://italy-startup-pulse.onrender.com/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-38b2ac?style=for-the-badge&logo=render&logoColor=white"></a>
-  <a href="https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici"><img alt="MIMIT source" src="https://img.shields.io/badge/source-MIMIT-102a43?style=for-the-badge"></a>
+  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml"><img src="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/medioalanum/italy-startup-pulse/actions/workflows/monthly-source-check.yml"><img src="https://img.shields.io/badge/source_check-monthly-38b2ac?style=flat-square&logo=githubactions&logoColor=white" alt="Monthly source check"></a>
+  <a href="https://italy-startup-pulse.onrender.com/"><img src="https://img.shields.io/badge/demo-live-38b2ac?style=flat-square" alt="Live demo"></a>
+  <a href="https://www.mimit.gov.it/it/impresa/competitivita-e-nuove-imprese/start-up-innovative/relazione-annuale-e-rapporti-periodici"><img src="https://img.shields.io/badge/source-MIMIT-102a43?style=flat-square" alt="MIMIT source"></a>
 </p>
 
 # Italy Startup Pulse

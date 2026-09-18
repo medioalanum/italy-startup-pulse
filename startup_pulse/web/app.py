@@ -3,9 +3,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from ..db import AggregateSnapshot, init_db, session
+from ..ingest import ingest
 
 templates = Jinja2Templates(directory="startup_pulse/web/templates")
 
@@ -13,6 +14,15 @@ templates = Jinja2Templates(directory="startup_pulse/web/templates")
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     init_db()
+    # Seed the public demo database once. Live deployments remain explicit and
+    # are populated by the ingestion workflow or a local operator.
+    if sample_mode():
+        with next(session()) as db:
+            has_snapshot = db.scalar(
+                select(func.count()).select_from(AggregateSnapshot)
+            )
+        if not has_snapshot:
+            ingest()
     yield
 
 

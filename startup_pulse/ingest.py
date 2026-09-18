@@ -4,7 +4,7 @@ import os
 from datetime import date
 from pathlib import Path
 
-from .db import AggregateSnapshot, init_db, session
+from .db import AggregateSnapshot, IngestionBatch, init_db, session
 from .models import AggregateRecord
 from .pdf_source import extract_pdf_records
 
@@ -71,13 +71,26 @@ def ingest() -> dict[str, int]:
                 )
             )
             accepted += 1
+        summary = {
+            "read": len(raw),
+            "accepted": accepted,
+            "rejected": rejected,
+            "revised": duplicates,
+        }
+        if db.query(IngestionBatch).filter_by(checksum=checksum).first() is None:
+            db.add(
+                IngestionBatch(
+                    quarter=str(os.getenv("SOURCE_QUARTER", raw[0]["quarter"])),
+                    source=os.getenv("SOURCE_PDF_PATH", str(SAMPLE_PATH)),
+                    checksum=checksum,
+                    records_read=summary["read"],
+                    records_accepted=summary["accepted"],
+                    records_rejected=summary["rejected"],
+                    records_revised=summary["revised"],
+                )
+            )
         db.commit()
-    return {
-        "read": len(raw),
-        "accepted": accepted,
-        "rejected": rejected,
-        "revised": duplicates,
-    }
+    return summary
 
 
 if __name__ == "__main__":

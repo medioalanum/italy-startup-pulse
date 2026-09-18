@@ -6,11 +6,11 @@ Pipeline and dashboard for the **aggregated** quarterly evolution of Italy's reg
 
 The MIMIT/InfoCamere quarterly Cruscotto publishes aggregate totals by region and by economic sector in separate tables. It does not publish company-level rows in those reports, and no region×sector cross-tab was confirmed. Registry totals are supported; new entries are unavailable; net change is computed only as the difference between comparable consecutive totals.
 
-The current implementation uses `SOURCE_MODE=sample` with a clearly labelled fixture. Live PDF ingestion is intentionally not enabled until the extraction and reuse conditions are verified.
+The current implementation uses `SOURCE_MODE=sample` with a clearly labelled fixture. Live PDF ingestion accepts `SOURCE_PDF_PATH` and `SOURCE_QUARTER`, and stores the source path, checksum, and execution summary in an `ingestion_batches` table.
 
 ## Setup
 
-Requires Python 3.12+, uv, and PostgreSQL. Copy `.env.example` to `.env`, set `DATABASE_URL`, then run `uv sync`.
+Requires Python 3.12+, uv, Docker, and Docker Compose. Start local PostgreSQL with `docker compose up -d postgres`, copy `.env.example` to `.env`, set `DATABASE_URL`, then run `uv sync`.
 
 ```bash
 uv run python -m startup_pulse.ingest

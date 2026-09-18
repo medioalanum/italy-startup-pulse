@@ -1,0 +1,1 @@
+CREATE DATABASE italy_startup_pulse_test;

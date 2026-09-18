@@ -29,6 +29,18 @@ class AggregateSnapshot(Base):
     batch_checksum: Mapped[str] = mapped_column(String(64))
 
 
+class IngestionBatch(Base):
+    __tablename__ = "ingestion_batches"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    quarter: Mapped[str] = mapped_column(String(7), index=True)
+    source: Mapped[str] = mapped_column(String(500))
+    checksum: Mapped[str] = mapped_column(String(64), unique=True)
+    records_read: Mapped[int] = mapped_column(Integer)
+    records_accepted: Mapped[int] = mapped_column(Integer)
+    records_rejected: Mapped[int] = mapped_column(Integer)
+    records_revised: Mapped[int] = mapped_column(Integer)
+
+
 class Anomaly(Base):
     __tablename__ = "anomalies"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

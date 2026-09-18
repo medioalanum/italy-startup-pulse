@@ -15,6 +15,8 @@ env:
 jobs:
   check-source:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -55,9 +57,8 @@ jobs:
           print(f'Validated {len(regions)} regions and {len(sectors)} sectors')
           PY
       - name: Ingest the validated snapshot into Neon
-        if: ${{ secrets.DATABASE_URL != '' }}
+        if: ${{ env.DATABASE_URL != '' }}
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SOURCE_MODE: live
           SOURCE_PDF_PATH: /tmp/latest-report.pdf
           SOURCE_QUARTER: ${{ env.SOURCE_QUARTER }}

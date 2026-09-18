@@ -1,1 +1,13 @@
-{% extends "base.html" %}{% block content %}<h1>Italy Startup Pulse</h1><p>Aggregated registry totals by region and sector.</p><table><tr><th>Quarter</th><th>Dimension</th><th>Name</th><th>Startups</th></tr>{% for row in rows %}<tr><td>{{ row.quarter }}</td><td>{{ row.dimension }}</td><td>{{ row.name }}</td><td>{{ row.startup_count }}</td></tr>{% endfor %}</table>{% endblock %}
+{% extends "base.html" %}{% block content %}
+<h1>Italy Startup Pulse</h1>
+<p>Aggregated registry totals by region and sector.</p>
+<p>Latest snapshot: <strong>{{ latest or "No data" }}</strong>{% if previous %}; previous comparable snapshot: {{ previous }}{% endif %}</p>
+<p><small>Net change is the difference between consecutive registry totals. It is not a measure of new entries.</small></p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem"><div><h2>Startups by region</h2><canvas id="regionChart"></canvas></div><div><h2>Startups by sector</h2><canvas id="sectorChart"></canvas></div></div>
+<h2>Latest snapshot</h2><table><tr><th>Dimension</th><th>Name</th><th>Startups</th><th>Net change</th></tr>{% for row in regional + sectors %}<tr><td>{{ row.dimension }}</td><td>{{ row.name }}</td><td>{{ row.startup_count }}</td><td>{{ net_changes[row.dimension ~ ':' ~ row.name] }}</td></tr>{% endfor %}</table>
+<script>
+const chartOptions = {responsive: true, plugins: {legend: {display: false}}};
+new Chart(document.getElementById('regionChart'), {type: 'bar', data: {labels: {{ regional | map(attribute='name') | list | tojson }}, datasets: [{label: 'Registered startups', data: {{ regional | map(attribute='startup_count') | list | tojson }}, backgroundColor: '#2563eb'}]}, options: chartOptions});
+new Chart(document.getElementById('sectorChart'), {type: 'bar', data: {labels: {{ sectors | map(attribute='name') | list | tojson }}, datasets: [{label: 'Registered startups', data: {{ sectors | map(attribute='startup_count') | list | tojson }}, backgroundColor: '#16a34a'}]}, options: chartOptions});
+</script>
+{% endblock %}

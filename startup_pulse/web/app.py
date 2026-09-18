@@ -29,10 +29,34 @@ def dashboard(request: Request):
         rows = db.scalars(
             select(AggregateSnapshot).order_by(AggregateSnapshot.quarter.desc())
         ).all()
+    quarters = sorted({row.quarter for row in rows}, reverse=True)
+    latest = quarters[0] if quarters else None
+    previous = quarters[1] if len(quarters) > 1 else None
+    latest_rows = [row for row in rows if row.quarter == latest]
+    previous_values = {
+        (row.dimension, row.name): row.startup_count
+        for row in rows
+        if row.quarter == previous
+    }
+    regional = [row for row in latest_rows if row.dimension == "region"]
+    sectors = [row for row in latest_rows if row.dimension == "sector"]
+    net_changes = {
+        f"{row.dimension}:{row.name}": row.startup_count
+        - previous_values.get((row.dimension, row.name), row.startup_count)
+        for row in latest_rows
+    }
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
-        context={"rows": rows, "sample": sample_mode()},
+        context={
+            "rows": rows,
+            "sample": sample_mode(),
+            "latest": latest,
+            "previous": previous,
+            "regional": regional,
+            "sectors": sectors,
+            "net_changes": net_changes,
+        },
     )
 
 

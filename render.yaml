@@ -2,6 +2,7 @@ services:
   - type: web
     name: italy-startup-pulse
     runtime: python
+    plan: free
     buildCommand: pip install uv && uv sync
     startCommand: uv run uvicorn startup_pulse.web.app:app --host 0.0.0.0 --port $PORT
     envVars:

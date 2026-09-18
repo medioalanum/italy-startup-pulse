@@ -4,4 +4,5 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 quarantine/
+tmp/
 *.py[cod]

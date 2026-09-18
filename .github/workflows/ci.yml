@@ -8,15 +8,16 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: italy_startup_pulse_test
+          POSTGRES_DB: italy_startup_pulse
         ports: ["5432:5432"]
     env:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/italy_startup_pulse_test
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/italy_startup_pulse
       TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/italy_startup_pulse_test
       SOURCE_MODE: sample
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+      - run: PGPASSWORD=postgres psql -h localhost -U postgres -d italy_startup_pulse -c "CREATE DATABASE italy_startup_pulse_test"
       - run: uv sync
       - run: uv run ruff check .
       - run: uv run ruff format --check .

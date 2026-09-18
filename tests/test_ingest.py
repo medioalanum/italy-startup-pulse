@@ -14,7 +14,7 @@ def test_live_mode_is_explicitly_unavailable(monkeypatch) -> None:
     monkeypatch.setenv("SOURCE_MODE", "live")
     try:
         load_records()
-    except NotImplementedError as exc:
-        assert "Live PDF ingestion" in str(exc)
+    except ValueError as exc:
+        assert "SOURCE_PDF_PATH" in str(exc)
     else:
         raise AssertionError("live mode must not silently use sample data")

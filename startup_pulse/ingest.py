@@ -6,14 +6,28 @@ from pathlib import Path
 
 from .db import AggregateSnapshot, init_db, session
 from .models import AggregateRecord
+from .pdf_source import extract_pdf_records
 
 SAMPLE_PATH = Path(__file__).parents[1] / "sample_data" / "snapshot.json"
 
 
 def load_records() -> list[dict[str, object]]:
-    if os.getenv("SOURCE_MODE", "sample") != "sample":
-        raise NotImplementedError("Live PDF ingestion is not enabled yet")
-    return json.loads(SAMPLE_PATH.read_text())
+    source_mode = os.getenv("SOURCE_MODE", "sample")
+    if source_mode == "sample":
+        return json.loads(SAMPLE_PATH.read_text())
+    if source_mode != "live":
+        raise ValueError("SOURCE_MODE must be either sample or live")
+    try:
+        pdf_path = Path(os.environ["SOURCE_PDF_PATH"])
+        quarter = os.environ["SOURCE_QUARTER"]
+    except KeyError as exc:
+        raise ValueError(
+            "SOURCE_PDF_PATH and SOURCE_QUARTER are required in live mode"
+        ) from exc
+    return [
+        record.model_dump(mode="json")
+        for record in extract_pdf_records(pdf_path, quarter)
+    ]
 
 
 def ingest() -> dict[str, int]:
